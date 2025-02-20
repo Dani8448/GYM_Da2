@@ -35,3 +35,34 @@ CREATE TABLE IF NOT EXISTS Inscripciones (
     FOREIGN KEY (clase_id) REFERENCES Clases(id)
 )
 """)
+
+# Funciones CRUD
+
+
+#Insertar,leer,borrar y  actualizar clientes
+
+def insertar_cliente():
+    nombre = input("Nombre del cliente: ")
+    edad = input("Edad del cliente: ")
+    cursor.execute("INSERT INTO Clientes (nombre, edad) VALUES (?, ?)", (nombre, edad))
+    conn.commit()
+    print("Cliente añadido.")
+
+def leer_clientes():
+    cursor.execute("SELECT * FROM Clientes")
+    for fila in cursor.fetchall():
+        print(fila)
+
+def actualizar_cliente():
+    id_cliente = input("ID del cliente a actualizar: ")
+    nombre = input("Nuevo nombre: ")
+    edad = input("Nueva edad: ")
+    cursor.execute("UPDATE Clientes SET nombre = ?, edad = ? WHERE id = ?", (nombre, edad, id_cliente))
+    conn.commit()
+    print("Cliente actualizado.")
+
+def borrar_cliente():
+    id_cliente = input("ID del cliente a eliminar: ")
+    cursor.execute("DELETE FROM Clientes WHERE id = ?", (id_cliente,))
+    conn.commit()
+    print("Cliente eliminado.")
