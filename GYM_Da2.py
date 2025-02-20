@@ -54,6 +54,7 @@ def insertar_cliente():
         conexion.rollback()
         print("Error:", e)
     finally:
+        conexion.commit
         conexion.close()
 
 
@@ -67,6 +68,7 @@ def leer_cliente():
     except Exception as e:
         print("Error:", e)
     finally:
+        conexion.commit
         conexion.close()
 
 def actualizar_cliente():
@@ -82,6 +84,7 @@ def actualizar_cliente():
         conexion.rollback()
         print("Error:", e)
     finally:
+        conexion.commit
         conexion.close()
 
 def borrar_cliente():
@@ -95,6 +98,7 @@ def borrar_cliente():
         conexion.rollback()
         print("Error:", e)
     finally:
+        conexion.commit
         conexion.close()
 
 
@@ -114,6 +118,7 @@ def insertar_clase():
         conexion.rollback()
         print("Error:", e)
     finally:
+        conexion.commit
         conexion.close()
 
 def leer_clase():
@@ -126,6 +131,7 @@ def leer_clase():
     except Exception as e:
         print("Error:", e)
     finally:
+        conexion.commit
         conexion.close()
 
 
@@ -145,6 +151,7 @@ def inscribir_cliente():
         conexion.rollback()
         print("Error:", e)
     finally:
+        conexion.commit
         conexion.close()
 
 def leer_inscripciones():
