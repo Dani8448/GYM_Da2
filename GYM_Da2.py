@@ -66,3 +66,20 @@ def borrar_cliente():
     cursor.execute("DELETE FROM Clientes WHERE id = ?", (id_cliente,))
     conn.commit()
     print("Cliente eliminado.")
+
+
+#Funciones CRUD clases
+
+#Insertar y leer clases
+
+def insertar_clase():
+    nombre = input("Nombre de la clase: ")
+    horario = input("Horario de la clase: ")
+    cursor.execute("INSERT INTO Clases (nombre, horario) VALUES (?, ?)", (nombre, horario))
+    conn.commit()
+    print("Clase añadida.")
+
+def leer_clases():
+    cursor.execute("SELECT * FROM Clases")
+    for fila in cursor.fetchall():
+        print(fila)
