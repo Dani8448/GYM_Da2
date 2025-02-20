@@ -158,3 +158,19 @@ def leer_inscripciones():
     cursor.execute("SELECT * FROM Inscripciones")
     for fila in cursor.fetchall():
         print(fila)
+
+# Menú principal
+def menu():
+    while True:
+        print("\n--- 🏋️‍♂️ GYM DA2 ---")
+        print("1️⃣  Añadir cliente")
+        print("2️⃣  Consultar cliente")
+        print("3️⃣  Actualizar cliente")
+        print("4️⃣  Eliminar cliente")
+        print("5️⃣  Añadir clase")
+        print("6️⃣  Consultar clase")
+        print("7️⃣  Inscribir cliente a clase")
+        print("8️⃣  Consultar inscripciones")
+        print("9️⃣  Salir")
+        
+        opcion = input("\n👉 Selecciona una opción: ")
