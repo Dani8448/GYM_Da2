@@ -174,3 +174,28 @@ def menu():
         print("9️⃣  Salir")
         
         opcion = input("\n👉 Selecciona una opción: ")
+
+        if opcion == "1":
+            insertar_cliente()
+        elif opcion == "2":
+            leer_cliente()
+        elif opcion == "3":
+            actualizar_cliente()
+        elif opcion == "4":
+            borrar_cliente()
+        elif opcion == "5":
+            insertar_clase()
+        elif opcion == "6":
+            leer_clase()
+        elif opcion == "7":
+            inscribir_cliente()
+        elif opcion == "8":
+            leer_inscripciones()
+        elif opcion == "9":
+            print("\n👋 Saliendo del programa...")
+            break
+        else:
+            print("❌ Opción no válida. Inténtalo de nuevo.")
+
+# Iniciar el menú
+menu()
