@@ -146,3 +146,8 @@ def inscribir_cliente():
         print("Error:", e)
     finally:
         conexion.close()
+
+def leer_inscripciones():
+    cursor.execute("SELECT * FROM Inscripciones")
+    for fila in cursor.fetchall():
+        print(fila)
