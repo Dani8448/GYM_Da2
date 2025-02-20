@@ -23,3 +23,15 @@ CREATE TABLE IF NOT EXISTS Clases (
     horario TEXT
 )
 """)
+
+#Tabla Inscripciones
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS Inscripciones (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    cliente_id INTEGER,
+    clase_id INTEGER,
+    FOREIGN KEY (cliente_id) REFERENCES Clientes(id),
+    FOREIGN KEY (clase_id) REFERENCES Clases(id)
+)
+""")
