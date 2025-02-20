@@ -83,3 +83,27 @@ def leer_clases():
     cursor.execute("SELECT * FROM Clases")
     for fila in cursor.fetchall():
         print(fila)
+
+
+#Funciones CRUD inscripciones
+
+#Inscribir cliente y leer inscripciones
+
+def inscribir_cliente():
+    leer_clientes()
+    cliente_id = input("ID del cliente: ")
+    leer_clases()
+    clase_id = input("ID de la clase: ")
+    try:
+        conn.execute("BEGIN")
+        cursor.execute("INSERT INTO Inscripciones (cliente_id, clase_id) VALUES (?, ?)", (cliente_id, clase_id))
+        conn.commit()
+        print("Cliente inscrito en la clase.")
+    except:
+        conn.rollback()
+        print("Error en la inscripción.")
+
+def leer_inscripciones():
+    cursor.execute("SELECT * FROM Inscripciones")
+    for fila in cursor.fetchall():
+        print(fila)
