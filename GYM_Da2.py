@@ -13,3 +13,13 @@ CREATE TABLE IF NOT EXISTS Clientes (
     edad INTEGER
 )
 """)
+
+#Tabla clases
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS Clases (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre TEXT NOT NULL,
+    horario TEXT
+)
+""")
