@@ -198,7 +198,7 @@ def menu():
             print("❌ Opción no válida. Inténtalo de nuevo.")
 
 # Iniciar el menú
-if __name__==__main__
+
 menu()
 
 conexion.commit
