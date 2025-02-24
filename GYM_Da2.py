@@ -90,18 +90,23 @@ def leer_cliente():
 
 def actualizar_cliente():
     try:
+        id_cliente = input("ID del cliente a actualizar: ").strip()
+        cursor.execute("SELECT * FROM Clientes WHERE id = ?", (id_cliente,))
+        if not cursor.fetchone():
+            print("❌ Cliente no encontrado.")
+            return
+
         conexion.execute("BEGIN")
-        id_cliente = input("ID del cliente a actualizar: ")
         nombre = input("Nuevo nombre: ")
         edad = input("Nueva edad: ")
         cursor.execute("UPDATE Clientes SET nombre = ?, edad = ? WHERE id = ?", (nombre, edad, id_cliente))
         conexion.commit()
-        print("Cliente actualizado.")
+        print("✅ Cliente actualizado.")
     except Exception as e:
         conexion.rollback()
         print("Error:", e)
     finally:
-        conexion.commit
+        conexion.commit()
         conexion.close()
 
 def borrar_cliente():
