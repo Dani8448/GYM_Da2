@@ -151,15 +151,25 @@ def insertar_clase():
 
 def leer_clase():
     try:
-        propiedad = input("Consultar por (id/nombre): ")
+        propiedad = input("Consultar por (id/nombre): ").strip().lower()
+        if propiedad not in ["id", "nombre"]:
+            print("❌ Propiedad no válida. Usa 'id' o 'nombre'.")
+            return
+        
         valor = input("Ingrese el valor: ")
-        cursor.execute(f"SELECT * FROM Clases WHERE {propiedad} = ?", (valor,))
-        for fila in cursor.fetchall():
-            print(fila)
+        query = f"SELECT * FROM Clases WHERE {propiedad} = ?"
+        cursor.execute(query, (valor,))
+        
+        resultados = cursor.fetchall()
+        if resultados:
+            for fila in resultados:
+                print(fila)
+        else:
+            print("❌ No se encontraron resultados.")
     except Exception as e:
         print("Error:", e)
     finally:
-        conexion.commit
+        conexion.commit()
         conexion.close()
 
 
