@@ -10,9 +10,12 @@ cursor.execute("""
 CREATE TABLE IF NOT EXISTS Clientes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     nombre TEXT NOT NULL,
-    edad INTEGER
+    apellidos TEXT NOT NULL,
+    edad INTEGER,
+    DNI TEXT NOT NULL
 )
 """)
+
 
 #Tabla clases
 
@@ -157,7 +160,6 @@ def inscribir_cliente():
 def leer_inscripciones():
     cursor.execute("SELECT * FROM Inscripciones")
     for fila in cursor.fetchall():
-        print(fila)
 
 # Menú principal
 def menu():
