@@ -193,9 +193,16 @@ def inscribir_cliente():
         conexion.close()
 
 def leer_inscripciones():
-    cursor.execute("SELECT * FROM Inscripciones")
-    for fila in cursor.fetchall():
-
+    try:
+        cursor.execute("SELECT * FROM Inscripciones")
+        for fila in cursor.fetchall():
+            print(fila)
+    except Exception as e:
+        print("Error:", e)
+    finally:
+        conexion.commit()
+        conexion.close()
+        
 # Menú principal
 def menu():
     while True:
