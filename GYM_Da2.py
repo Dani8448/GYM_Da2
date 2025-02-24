@@ -1,11 +1,10 @@
 import sqlite3
 
-# Conectar a la base de datos (se crea si no existe)
+# Conectar a la base de datos 
 conexion = sqlite3.connect("gym_da2.db")
 cursor = conexion.cursor()
 
-#Tabla cientes
-
+# Tabla Clientes
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS Clientes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -16,9 +15,7 @@ CREATE TABLE IF NOT EXISTS Clientes (
 )
 """)
 
-
-#Tabla clases
-
+# Tabla Clases
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS Clases (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -27,8 +24,7 @@ CREATE TABLE IF NOT EXISTS Clases (
 )
 """)
 
-#Tabla Inscripciones
-
+# Tabla Inscripciones
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS Inscripciones (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -40,28 +36,21 @@ CREATE TABLE IF NOT EXISTS Inscripciones (
 """)
 
 conexion.commit()
-# Funciones CRUD
 
-
-#Insertar,leer,borrar y  actualizar clientes
-
+# Funciones CRUD Clientes
 def insertar_cliente():
     try:
-        conexion.execute("BEGIN")
         nombre = input("Nombre del cliente: ")
-        edad = input("Edad del cliente: ")
         apellidos = input("Apellidos del cliente: ")
+        edad = input("Edad del cliente: ")
         DNI = input("DNI del cliente: ")
-        cursor.execute("INSERT INTO Clientes (nombre, edad, apellidos, DNI) VALUES (?, ?, ?, ?)", (nombre, edad, apellidos, DNI))
+        
+        cursor.execute("INSERT INTO Clientes (nombre, apellidos, edad, DNI) VALUES (?, ?, ?, ?)", (nombre, apellidos, edad, DNI))
         conexion.commit()
-        print("Cliente añadido.")
+        print("\n✅ Cliente añadido con éxito.")
     except Exception as e:
         conexion.rollback()
         print("Error:", e)
-    finally:
-        conexion.commit()
-        conexion.close()
-
 
 
 def leer_cliente():
@@ -72,8 +61,7 @@ def leer_cliente():
             return
         
         valor = input("Ingrese el valor: ")
-        query = f"SELECT * FROM Clientes WHERE {propiedad} = ?"
-        cursor.execute(query, (valor,))
+        cursor.execute(f"SELECT * FROM Clientes WHERE {propiedad} = ?", (valor,))
         
         resultados = cursor.fetchall()
         if resultados:
@@ -83,41 +71,44 @@ def leer_cliente():
             print("❌ No se encontraron resultados.")
     except Exception as e:
         print("Error:", e)
-    finally:
-        conexion.commit()
-        conexion.close()
 
 
 def actualizar_cliente():
     try:
         id_cliente = input("ID del cliente a actualizar: ").strip()
         cursor.execute("SELECT * FROM Clientes WHERE id = ?", (id_cliente,))
-        if not cursor.fetchone():
+        cliente = cursor.fetchone()
+
+        if not cliente:
             print("❌ Cliente no encontrado.")
             return
 
-        conexion.execute("BEGIN")
-        nombre = input("Nuevo nombre: ")
-        edad = input("Nueva edad: ")
+        nombre = input("Nuevo nombre (deja en blanco para no cambiar): ").strip() or cliente[1]
+        edad = input("Nueva edad (deja en blanco para no cambiar): ").strip() or cliente[3]
+
         cursor.execute("UPDATE Clientes SET nombre = ?, edad = ? WHERE id = ?", (nombre, edad, id_cliente))
         conexion.commit()
         print("✅ Cliente actualizado.")
     except Exception as e:
         conexion.rollback()
         print("Error:", e)
-    finally:
-        conexion.commit()
-        conexion.close()
+
 
 def borrar_cliente():
     try:
         id_cliente = input("ID del cliente a eliminar: ").strip()
         cursor.execute("SELECT * FROM Clientes WHERE id = ?", (id_cliente,))
-        if not cursor.fetchone():
+        cliente = cursor.fetchone()
+
+        if not cliente:
             print("❌ Cliente no encontrado.")
             return
 
-        conexion.execute("BEGIN")
+        confirmar = input("¿Estás seguro de que quieres eliminar este cliente? (s/n): ").strip().lower()
+        if confirmar != "s":
+            print("❌ Operación cancelada.")
+            return
+
         cursor.execute("DELETE FROM Inscripciones WHERE cliente_id = ?", (id_cliente,))
         cursor.execute("DELETE FROM Clientes WHERE id = ?", (id_cliente,))
         conexion.commit()
@@ -125,72 +116,55 @@ def borrar_cliente():
     except Exception as e:
         conexion.rollback()
         print("Error:", e)
-    finally:
-        conexion.commit()
-        conexion.close()
 
 
-#Funciones CRUD clases
-
-#Insertar y leer clases
-
+# Funciones CRUD Clases
 def insertar_clase():
     try:
-        conexion.execute("BEGIN")
-        nombre = input("Nombre de la clase: ")
-        horario = input("Horario de la clase: ")
+        nombre = input("Nombre de la clase: ").strip()
+        horario = input("Horario de la clase: ").strip()
+        
         cursor.execute("INSERT INTO Clases (nombre, horario) VALUES (?, ?)", (nombre, horario))
         conexion.commit()
-        print("Clase añadida.")
+        print("✅ Clase añadida.")
     except Exception as e:
         conexion.rollback()
         print("Error:", e)
-    finally:
-        conexion.commit
-        conexion.close()
+
 
 def leer_clase():
     try:
         propiedad = input("Consultar por (id/nombre): ").strip().lower()
         if propiedad not in ["id", "nombre"]:
-            print("❌ Propiedad no válida. Usa 'id' o 'nombre'.")
+            print("❌ Propiedad no válida.")
             return
         
-        valor = input("Ingrese el valor: ")
-        query = f"SELECT * FROM Clases WHERE {propiedad} = ?"
-        cursor.execute(query, (valor,))
+        valor = input("Ingrese el valor: ").strip()
+        cursor.execute(f"SELECT * FROM Clases WHERE {propiedad} = ?", (valor,))
         
         resultados = cursor.fetchall()
         if resultados:
-            for fila in resultados:
-                print(fila)
+            for clase in resultados:
+                print(f"ID: {clase[0]} | Nombre: {clase[1]} | Horario: {clase[2]}")
         else:
             print("❌ No se encontraron resultados.")
     except Exception as e:
         print("Error:", e)
-    finally:
-        conexion.commit()
-        conexion.close()
 
 
-#Funciones CRUD inscripciones
-
-#Inscribir cliente y leer inscripciones
-
+# Inscripciones
 def inscribir_cliente():
     try:
-        conexion.execute("BEGIN")
         id_cliente = input("ID del cliente: ").strip()
         id_clase = input("ID de la clase: ").strip()
+        
         cursor.execute("INSERT INTO Inscripciones (cliente_id, clase_id) VALUES (?, ?)", (id_cliente, id_clase))
         conexion.commit()
-        print("✅ Cliente inscrito en la clase.")
+        print("✅ Inscripción realizada.")
     except Exception as e:
         conexion.rollback()
         print("Error:", e)
-    finally:
-        conexion.commit()
-        conexion.close()
+
 
 def leer_inscripciones():
     try:
@@ -199,9 +173,7 @@ def leer_inscripciones():
             print(fila)
     except Exception as e:
         print("Error:", e)
-    finally:
-        conexion.commit()
-        conexion.close()
+
 
 # Menú principal
 def menu():
@@ -219,33 +191,27 @@ def menu():
 
         opcion = input("\n👉 Selecciona una opción: ").strip()
 
-        try:
-            if opcion == "1":
-                insertar_cliente()
-            elif opcion == "2":
-                leer_cliente()
-            elif opcion == "3":
-                actualizar_cliente()
-            elif opcion == "4":
-                borrar_cliente()
-            elif opcion == "5":
-                insertar_clase()
-            elif opcion == "6":
-                leer_clase()
-            elif opcion == "7":
-                inscribir_cliente()
-            elif opcion == "8":
-                leer_inscripciones()
-            elif opcion == "9":
-                print("\n👋 Saliendo del programa...")
-                break
-            else:
-                print("❌ Opción no válida. Inténtalo de nuevo.")
-        except Exception as e:
-            print("❌ Error en la ejecución:", e)
+        if opcion == "1":
+            insertar_cliente()
+        elif opcion == "2":
+            leer_cliente()
+        elif opcion == "3":
+            actualizar_cliente()
+        elif opcion == "4":
+            borrar_cliente()
+        elif opcion == "5":
+            insertar_clase()
+        elif opcion == "6":
+            leer_clase()
+        elif opcion == "7":
+            inscribir_cliente()
+        elif opcion == "8":
+            leer_inscripciones()
+        elif opcion == "9":
+            print("\n👋 Saliendo del programa...")
+            break
+        else:
+            print("❌ Opción no válida.")
 
-# Iniciar el menú
 menu()
-
-conexion.commit()
 conexion.close()
