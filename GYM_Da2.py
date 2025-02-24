@@ -106,16 +106,22 @@ def actualizar_cliente():
 
 def borrar_cliente():
     try:
+        id_cliente = input("ID del cliente a eliminar: ").strip()
+        cursor.execute("SELECT * FROM Clientes WHERE id = ?", (id_cliente,))
+        if not cursor.fetchone():
+            print("❌ Cliente no encontrado.")
+            return
+
         conexion.execute("BEGIN")
-        id_cliente = input("ID del cliente a eliminar: ")
+        cursor.execute("DELETE FROM Inscripciones WHERE cliente_id = ?", (id_cliente,))
         cursor.execute("DELETE FROM Clientes WHERE id = ?", (id_cliente,))
         conexion.commit()
-        print("Cliente eliminado.")
+        print("✅ Cliente eliminado.")
     except Exception as e:
         conexion.rollback()
         print("Error:", e)
     finally:
-        conexion.commit
+        conexion.commit()
         conexion.close()
 
 
