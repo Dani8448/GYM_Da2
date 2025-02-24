@@ -180,16 +180,16 @@ def leer_clase():
 def inscribir_cliente():
     try:
         conexion.execute("BEGIN")
-        id_cliente = input("ID del cliente: ")
-        id_clase = input("ID de la clase: ")
+        id_cliente = input("ID del cliente: ").strip()
+        id_clase = input("ID de la clase: ").strip()
         cursor.execute("INSERT INTO Inscripciones (cliente_id, clase_id) VALUES (?, ?)", (id_cliente, id_clase))
         conexion.commit()
-        print("Cliente inscrito en la clase.")
+        print("✅ Cliente inscrito en la clase.")
     except Exception as e:
         conexion.rollback()
         print("Error:", e)
     finally:
-        conexion.commit
+        conexion.commit()
         conexion.close()
 
 def leer_inscripciones():
