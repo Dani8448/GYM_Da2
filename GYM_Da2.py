@@ -50,15 +50,18 @@ def insertar_cliente():
         conexion.execute("BEGIN")
         nombre = input("Nombre del cliente: ")
         edad = input("Edad del cliente: ")
-        cursor.execute("INSERT INTO Clientes (nombre, edad) VALUES (?, ?)", (nombre, edad))
+        apellidos = input("Apellidos del cliente: ")
+        DNI = input("DNI del cliente: ")
+        cursor.execute("INSERT INTO Clientes (nombre, edad, apellidos, DNI) VALUES (?, ?, ?, ?)", (nombre, edad, apellidos, DNI))
         conexion.commit()
         print("Cliente añadido.")
     except Exception as e:
         conexion.rollback()
         print("Error:", e)
     finally:
-        conexion.commit
+        conexion.commit()
         conexion.close()
+
 
 
 def leer_cliente():
