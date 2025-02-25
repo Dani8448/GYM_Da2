@@ -70,6 +70,7 @@ def leer_cliente():
         else:
             print("❌ No se encontraron resultados.")
     except Exception as e:
+        conexion.rollback()
         print("Error:", e)
 
 
